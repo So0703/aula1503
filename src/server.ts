@@ -1,6 +1,7 @@
 import express from 'express'
 import dataBase from './database/ormconfig'
 import routes from './routes'
+import cors from 'cors'
 
 const app = express()
 const port = process.env.PORT || 3000
@@ -13,3 +14,6 @@ app.listen(port, () => {
     console.log(dataBase.isInitialized ? 'Banco ok!' : 'Banco carregando')
 })
 
+app.use(cord({
+    origin: ['https://localhost:3000','https://meuapp.com']
+}))
