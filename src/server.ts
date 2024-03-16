@@ -14,6 +14,6 @@ app.listen(port, () => {
     console.log(dataBase.isInitialized ? 'Banco ok!' : 'Banco carregando')
 })
 
-app.use(cord({
+app.use(cors({
     origin: ['https://localhost:3000','https://meuapp.com']
 }))
