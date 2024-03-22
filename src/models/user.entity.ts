@@ -1,4 +1,5 @@
 import { Entity, BaseEntity, PrimaryGeneratedColumn, Column } from 'typeorm'
+import Token from "./token.entity"
 
 @Entity()
 export default class User extends BaseEntity {
@@ -6,11 +7,14 @@ export default class User extends BaseEntity {
   id!: number
 
   @Column()
-  name!: string
+  name!: string //! significa obrigatorio ? opcional
 
   @Column()
   email!: string
 
   @Column()
   password!: string
+
+  @OneToMany(() => Token, token => token.user)
+  tokens?: Token[]
 }
