@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import User from '../../models/user.entity'
-//import Token from '../../models/token.entity'
+import Token from '../../models/token.entity'
 import bcrypt from 'bcrypt'
 
 export default class AuthController {
@@ -25,31 +25,26 @@ export default class AuthController {
     })
   }
 
-  /*static async login (req: Request, res: Response) {
+  static async login (req: Request, res: Response) {
     const { email, password } = req.body
 
-    if (!email) return res.status(400).json({ error: 'O email é obrigatório' })
-    if (!password) return res.status(400).json({ error: 'A senha é obrigatória' })
+    if (!email || !password) return res.status(400).json({ error: 'Email e senha são obrigatórios' })
 
     const user = await User.findOneBy({ email })
     if (!user) return res.status(401).json({ error: 'Usuário não encontrado' })
 
-    const passwordMatch = bcrypt.compareSync(password, user.password)
-    if (!passwordMatch) return res.status(401).json({ error: 'Senha inválida' })
+    const passCheck = bcrypt.compareSync(password, user.password)
+    if (!passCheck) return res.status(401).json({ error: 'Senha inválida' })
 
-    // Remove todos os tokens antigos do usuário
     await Token.delete(
-      { user: { id: user.id } }
+      { user: { id: user.id } } // opcional
     )
 
     const token = new Token()
-    // Gera um token aleatório
-    token.token = bcrypt.hashSync(Math.random().toString(36), 1).slice(-20)
-    // Define a data de expiração do token para 1 hora
+    const stringRand = Math.random().toString(36) + new Date().toString()
+    token.token = bcrypt.hashSync(stringRand, 1).slice(-20)
     token.expiresAt = new Date(Date.now() + 60 * 60 * 1000)
-    // Gera um refresh token aleatório
-    token.refreshToken = bcrypt.hashSync(Math.random().toString(36), 1).slice(-20)
-
+    token.refreshToken = bcrypt.hashSync(stringRand+2,1)
     token.user = user
     await token.save()
 
@@ -60,7 +55,7 @@ export default class AuthController {
     })
   }
 
-  static async refresh (req: Request, res: Response) {
+  /*static async refresh (req: Request, res: Response) {
     const { authorization } = req.headers
 
     if (!authorization) return res.status(400).json({ error: 'O refresh token é obrigatório' })
