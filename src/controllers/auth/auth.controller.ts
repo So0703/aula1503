@@ -81,7 +81,7 @@ export default class AuthController {
     })
   }
 
-  /*static async logout (req: Request, res: Response) {
+  static async logout (req: Request, res: Response) {
     const { authorization } = req.headers
     
     if (!authorization) return res.status(400).json({ error: 'O token é obrigatório' })
@@ -95,5 +95,5 @@ export default class AuthController {
 
     // Retorna uma resposta vazia
     return res.status(204).json()
-  }*/
+  }
 }
