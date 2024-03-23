@@ -17,5 +17,6 @@ export default async function authMiddleware
 
   req.headers.userId = userToken.userId.toString()
 
+
   next()
 }
